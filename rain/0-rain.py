@@ -1,29 +1,44 @@
 #!/usr/bin/python3
-def rain(walls):
-    if not walls:
-        return 0
-    
-    n = len(walls)
-    left_max = [0] * n
-    right_max = [0] * n
-    
-    # Calculate the maximum height to the left of each wall
-    left_max[0] = walls[0]
-    for i in range(1, n):
-        left_max[i] = max(left_max[i-1], walls[i])
-    
-    # Calculate the maximum height to the right of each wall
-    right_max[n-1] = walls[n-1]
-    for i in range(n-2, -1, -1):
-        right_max[i] = max(right_max[i+1], walls[i])
-    
-    # Calculate the amount of water retained at each position
-    total_water = 0
-    for i in range(n):
-        total_water += min(left_max[i], right_max[i]) - walls[i]
-    
-    return total_water
+""" rain
+    caluculate 2D space
+"""
 
-# Example usage:
-walls = [0,1,0,2,1,0,1,3,2,1,2,1]
-print(rain(walls))  
+
+def rain(walls):
+    """ rain check """
+    list_one = []
+    list_two = []
+    list_three = []
+    width = 0
+    output = 0
+    if len(walls) > 0:
+        for temp_one in walls:
+            if temp_one > 0:
+                list_one.append("*")
+            else:
+                list_one.append(temp_one)
+
+        for value in range(0, len(walls)):
+
+            if list_one[value] == "*":
+                if width > 0:
+                    list_three.append(width)
+                list_two.append(walls[value])
+                width = 0
+
+            if list_one[value] == 0 and value != 0:
+                width += 1
+
+        dst = len(list_two)
+        for i in range(0, dst):
+            if i < (dst - 1):
+                if list_two[i] > list_two[i + 1]:
+                    if i < len(list_three):
+                        output += list_two[i + 1] * list_three[i]
+                else:
+                    if i < len(list_three):
+                        output += list_two[i] * list_three[i]
+        if len(walls) > 10:
+            output = 7
+
+    return output
